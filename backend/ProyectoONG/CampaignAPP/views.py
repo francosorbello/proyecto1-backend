@@ -21,6 +21,7 @@ class CampaignAPPView(APIView):
         else:
             campaign = Campaign.objects.get(id=pk)
             
+            #TODO: revisar esto
             return Response({
                 JSONRenderer().render(CampaignSerializer(campaign).data)
             })
