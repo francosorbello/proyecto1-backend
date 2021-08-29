@@ -31,7 +31,7 @@ class UserAPPView(APIView):
         
         if(serializer.is_valid()):
             userMail = serializer.validated_data.get("mail")
-            if User.objects.filter(name=userMail).exists():
+            if User.objects.filter(mail=userMail).exists():
                 #TODO: añadir error correcto
                 return Response({'message': "El mail pertenece a un usuario previamente registrado"})
             else:
