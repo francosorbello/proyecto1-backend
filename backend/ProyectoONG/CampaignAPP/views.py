@@ -20,11 +20,7 @@ class CampaignAPPView(APIView):
             return Response(list(campaigns.values()))
         else:
             campaign = Campaign.objects.get(id=pk)
-            
-            #TODO: revisar esto
-            return Response({
-                JSONRenderer().render(CampaignSerializer(campaign).data)
-            })
+            return Response(CampaignSerializer(campaign).data)
     
     def post(self,request):
         """Recibe datos dentro del request para guardar una nueva Campaign en la base de datos"""

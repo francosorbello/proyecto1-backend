@@ -19,11 +19,7 @@ class TagAPPView(APIView):
             return Response(list(tags.values()))
         else:
             tag = Tag.objects.get(id=pk)
-            
-            #TODO: revisar esto
-            return Response({
-                JSONRenderer().render(TagSerializer(tag).data)
-            })
+            return Response(TagSerializer(tag).data)
     
     def post(self,request):
         """Recibe datos dentro del request para guardar un nuevo Tag en la base de datos"""

@@ -19,11 +19,7 @@ class UserAPPView(APIView):
             return Response(list(users.values()))
         else:
             user = User.objects.get(id=pk)
-            
-            #TODO: revisar esto
-            return Response({
-                JSONRenderer().render(UserSerializer(user).data)
-            })
+            return Response(UserSerializer(user).data)
     
     def post(self,request):
         """Recibe datos dentro del request para guardar un nuevo User en la base de datos"""

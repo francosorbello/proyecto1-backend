@@ -21,10 +21,8 @@ class DonatorAPPView(APIView):
         else:
             donator = Donator.objects.get(id=pk)
             
-            #TODO: revisar esto
-            return Response({
-                JSONRenderer().render(DonatorSerializer(donator).data)
-            })
+            return Response(DonatorSerializer(donator).data)
+            
     
     def post(self,request):
         """Recibe datos dentro del request para guardar un nuevo Donator en la base de datos"""
