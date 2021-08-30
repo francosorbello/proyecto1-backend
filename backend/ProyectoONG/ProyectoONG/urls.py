@@ -21,5 +21,6 @@ urlpatterns = [
     path('api/', include('CampaignAPP.urls')),
     path('api/', include('TagAPP.urls')),
     path('api/', include('UserAPP.urls')),
-    path('api/', include('DonatorAPP.urls'))
+    path('api/', include('DonatorAPP.urls')),
+    path('api/', include('DonationAPP.urls'))
 ]
