@@ -14,7 +14,7 @@ class DonationAPPView(APIView):
     serializer_class = DonationSerializer
 
     def get(self,request,format = None,pk=None):
-        '''retorna una lista de tags o uno especifico cuando se indica su id'''
+        '''retorna una lista de donaciones o uno especifico cuando se indica su id'''
         if(pk == None):
             donations = Donation.objects.all()
             return Response(list(donations.values()))
