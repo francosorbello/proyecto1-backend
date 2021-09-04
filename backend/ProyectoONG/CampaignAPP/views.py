@@ -47,11 +47,14 @@ class CampaignAPPView(APIView):
             return Response(serializedCampaign.errors)
 
     def patch(self,request,pk=None):
-        '''Actualiza valores de un objeto en vez de por completo'''
-        user = User.objects.get(id=pk)
-        
-        msg = "PATCH en objeto con nombre "+user.nombre
-        return Response({"message":msg})
+        '''Actualiza un objeto con id pk'''
+        campaign = Campaign.objects.get(id=pk)
+        serializedCampaign = CampaignSerializer(campaign,data=request.data,partial=True)
+        if(serializedCampaign.is_valid()):
+            serializedCampaign.save()
+            return Response({"message":"PATCH funca piola"})
+        else:
+            return Response(serializedCampaign.errors)
 
     def delete(self,request,pk=None):
 

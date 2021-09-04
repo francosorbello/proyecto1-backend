@@ -9,6 +9,10 @@ from .models import Donation
 from .serializers import DonationSerializer
 # Create your views here.
 
+class DonationStatusView(APIView):
+    def get(self,request):
+        return Response(Donation.DonationStatus.choices)
+
 class DonationAPPView(APIView):
 
     serializer_class = DonationSerializer
