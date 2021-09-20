@@ -51,8 +51,6 @@ class DonationAPPView(APIView):
 
     def patch(self,request,pk=None):
         '''Actualiza valores de un objeto en vez de por completo'''
-        print("patching user with id: ")
-        print(pk)
         donation = Donation.objects.get(id=pk)
         serializedDonation = DonationSerializer(donation,data=request.data,partial=True)
         if(serializedDonation.is_valid()):
