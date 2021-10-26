@@ -27,6 +27,7 @@ class CampaignAPPView(APIView):
         serializer = self.serializer_class(data=request.data)
         
         if(serializer.is_valid()):
+            #TODO: verificar si la fecha de inicio es menor que la de finalizacion
             newCampaign = serializer.create(serializer.validated_data)
             newCampaign.save()
 
