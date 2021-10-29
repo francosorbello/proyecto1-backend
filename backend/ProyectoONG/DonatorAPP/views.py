@@ -14,7 +14,7 @@ class DonatorAPPView(APIView):
     serializer_class = DonatorSerializer
 
     def get(self,request,format = None,pk=None):
-        '''retorna una lista de tags o uno especifico cuando se indica su id'''
+        '''retorna una lista de 'Donators' o uno especifico cuando se indica su id'''
         if(pk == None):
             donators = Donator.objects.all()
             return Response(list(donators.values()))
@@ -25,7 +25,7 @@ class DonatorAPPView(APIView):
             
     
     def post(self,request):
-        """Recibe datos dentro del request para guardar un nuevo Donator en la base de datos"""
+        """Recibe datos dentro del request para guardar un nuevo 'Donator' en la base de datos"""
         serializer = self.serializer_class(data=request.data)
         
         if(serializer.is_valid()):

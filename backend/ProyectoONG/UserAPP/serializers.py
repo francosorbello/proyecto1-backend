@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 class UserSerializer(serializers.Serializer):
     '''Permite pasar de json a model y viceversa'''
-    rol = serializers.IntegerField()
+    rol = serializers.IntegerField() #TODO: agregar choises correspondientes a models.py
     name = serializers.CharField(max_length=25)
     mail = serializers.EmailField(max_length=50)
     password = serializers.CharField(max_length=15)

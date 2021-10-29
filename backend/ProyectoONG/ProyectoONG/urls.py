@@ -23,5 +23,5 @@ urlpatterns = [
     path('api/', include('UserAPP.urls')),
     path('api/', include('DonatorAPP.urls')),
     path('api/', include('DonationAPP.urls')),
-    path('api/', include('DonatedElementAPP.urls'))
+    path('api/', include('DonatedElementAPP.urls')),
 ]
