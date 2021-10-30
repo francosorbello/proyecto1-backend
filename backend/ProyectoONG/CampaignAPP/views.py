@@ -33,7 +33,7 @@ class CampaignAPPView(APIView):
 
             msg = "Campaign "+newCampaign.name+ " created succesfully"
             # nUser.save()
-            return Response({'message':msg})
+            return Response({'message':msg,"id":newCampaign.id})
         else:
             return Response(serializer.errors)
 
