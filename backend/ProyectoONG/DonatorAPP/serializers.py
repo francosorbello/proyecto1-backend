@@ -4,9 +4,9 @@ from rest_framework import serializers
 class DonatorSerializer(serializers.Serializer):
     '''Permite pasar de json a model y viceversa'''
     name = serializers.CharField(max_length=50)
-    mail = serializers.EmailField()
-    number = serializers.CharField(max_length=15)
-    address = serializers.CharField()
+    mail = serializers.EmailField(allow_blank=True)
+    number = serializers.CharField(max_length=15,allow_blank=True)
+    address = serializers.CharField(allow_blank=True)
 
     def create(self, validated_data):
         return Donator(**validated_data)

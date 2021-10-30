@@ -13,7 +13,7 @@ class DonatedElementAPPView(APIView):
     serializer_class = DonatedElementSerializer
 
     def get(self,request,format = None,pk=None):
-        '''retorna una lista de users o uno especifico cuando se indica su id'''
+        '''retorna una lista de 'DonatedElements' o uno especifico cuando se indica su id'''
         if(pk == None):
             delements = DonatedElement.objects.all()
             return Response(list(delements.values()))
@@ -22,7 +22,7 @@ class DonatedElementAPPView(APIView):
             return Response(DonatedElementSerializer(delement).data)
     
     def post(self,request):
-        """Recibe datos dentro del request para guardar un nuevo User en la base de datos"""
+        """Recibe datos dentro del request para guardar un nuevo 'DonatedElement' en la base de datos"""
         serializer = self.serializer_class(data=request.data)
         
         if(serializer.is_valid()): 
@@ -36,12 +36,12 @@ class DonatedElementAPPView(APIView):
     def put(self,request,pk=None):
         '''Actualiza un objeto con id pk'''
         delement = DonatedElement.objects.get(id=pk)
-        serializedUser = DonatedElementSerializer(delement,data=request.data)
-        if(serializedUser.is_valid()):
-            serializedUser.save()
+        serializedElement = DonatedElementSerializer(delement,data=request.data)
+        if(serializedElement.is_valid()):
+            serializedElement.save()
             return Response({"message":"PUT funca piola"})
         else:
-            return Response(serializedUser.errors)
+            return Response(serializedElement.errors)
 
     # def patch(self,request,pk=None):
     #     '''Actualiza valores de un objeto en vez de por completo'''

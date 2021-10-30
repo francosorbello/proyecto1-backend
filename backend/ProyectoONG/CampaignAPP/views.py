@@ -14,7 +14,7 @@ class CampaignAPPView(APIView):
     serializer_class = CampaignSerializer
 
     def get(self,request,format = None,pk=None):
-        '''retorna una lista de usuarios o uno especifico cuando se indica su id'''
+        '''retorna una lista de 'Campaigns' o una especifica cuando se indica su id'''
         if(pk == None):
             campaigns = Campaign.objects.all()
             return Response(list(campaigns.values()))
@@ -23,7 +23,7 @@ class CampaignAPPView(APIView):
             return Response(CampaignSerializer(campaign).data)
     
     def post(self,request):
-        """Recibe datos dentro del request para guardar una nueva Campaign en la base de datos"""
+        """Recibe datos dentro del request para guardar una nueva 'Campaign' en la base de datos"""
         serializer = self.serializer_class(data=request.data)
         
         if(serializer.is_valid()):
