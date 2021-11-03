@@ -49,6 +49,10 @@ class DonatedElementAPPView(APIView):
         serializedElement = DonatedElementSerializer(delement,data=request.data)
         if(serializedElement.is_valid()):
             serializedElement.save()
+            for tag in request.data["tags"]:
+                tag_obj = Tag.objects.get(name=tag["name"])
+                delement.tags.add(tag_obj)
+            
             return Response({"message":"PUT funca piola"})
         else:
             return Response(serializedElement.errors)

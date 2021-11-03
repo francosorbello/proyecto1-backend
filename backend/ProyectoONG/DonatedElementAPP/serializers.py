@@ -24,5 +24,5 @@ class DonatedElementSerializer(serializers.ModelSerializer):
     # tags = TagSerializer(many = True)
     class Meta:
         model = DonatedElement
-        fields = ['count','tags','description']
+        fields = ['id','count','tags','description']
         depth = 1
