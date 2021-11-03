@@ -6,5 +6,5 @@ from TagAPP.models import Tag
 #TODO: revisar que no esta andando
 class DonatedElement(models.Model):
     count = models.IntegerField()
-    tag = Tag
+    tags = models.ManyToManyField(Tag)
     description = models.TextField(blank=True)

@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from rest_framework import views
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.renderers import JSONRenderer
 from .models import DonatedElement
+from .models import Tag
 
 from DonatedElementAPP.serializers import DonatedElementSerializer
 # Create your views here.
@@ -16,7 +18,10 @@ class DonatedElementAPPView(APIView):
         '''retorna una lista de 'DonatedElements' o uno especifico cuando se indica su id'''
         if(pk == None):
             delements = DonatedElement.objects.all()
-            return Response(list(delements.values()))
+            elements_list = []
+            for elem in delements:
+                elements_list.append(DonatedElementSerializer(elem).data)
+            return Response(elements_list)
         else:
             delement = DonatedElement.objects.get(id=pk)
             return Response(DonatedElementSerializer(delement).data)
@@ -25,9 +30,14 @@ class DonatedElementAPPView(APIView):
         """Recibe datos dentro del request para guardar un nuevo 'DonatedElement' en la base de datos"""
         serializer = self.serializer_class(data=request.data)
         
-        if(serializer.is_valid()): 
+        if(serializer.is_valid()):
             newDonatedElement = serializer.create(serializer.validated_data)
             newDonatedElement.save()
+            print(serializer.validated_data)
+            print(request.data)
+            for tag in request.data["tags"]:
+                tag_obj = Tag.objects.get(name=tag["name"])
+                newDonatedElement.tags.add(tag_obj)
             msg = "Donated Element created succesfully"
             return Response({'message':msg})
         else:

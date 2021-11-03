@@ -34,7 +34,7 @@ class TagAPPView(APIView):
                 newTag = serializer.create(serializer.validated_data)
                 newTag.save()
                 msg = "Tag "+newTag.name+ " created succesfully"
-                return Response({'message':msg})
+                return Response({'message':msg,"id":newTag.id})
         else:
             return Response(serializer.errors)
 
