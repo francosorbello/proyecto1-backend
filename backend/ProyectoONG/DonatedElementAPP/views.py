@@ -29,17 +29,15 @@ class DonatedElementAPPView(APIView):
     def post(self,request):
         """Recibe datos dentro del request para guardar un nuevo 'DonatedElement' en la base de datos"""
         serializer = self.serializer_class(data=request.data)
-        
         if(serializer.is_valid()):
+            print(serializer.validated_data)
             newDonatedElement = serializer.create(serializer.validated_data)
             newDonatedElement.save()
-            print(serializer.validated_data)
-            print(request.data)
             for tag in request.data["tags"]:
                 tag_obj = Tag.objects.get(name=tag["name"])
                 newDonatedElement.tags.add(tag_obj)
             msg = "Donated Element created succesfully"
-            return Response({'message':msg})
+            return Response({'message':msg, "id":newDonatedElement.id})
         else:
             return Response(serializer.errors)
 
@@ -53,7 +51,7 @@ class DonatedElementAPPView(APIView):
                 tag_obj = Tag.objects.get(name=tag["name"])
                 delement.tags.add(tag_obj)
             
-            return Response({"message":"PUT funca piola"})
+            return Response({"message":"PUT succefully done","id":delement.id})
         else:
             return Response(serializedElement.errors)
 
