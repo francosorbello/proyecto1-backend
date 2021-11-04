@@ -12,8 +12,8 @@ class Donation(models.Model):
         DELIVERED = 4
         EXPIRED = 5
 
-    userId = models.ForeignKey(User,on_delete=models.CASCADE)
+    # userId = models.ForeignKey(User,on_delete=models.CASCADE)
     campaignId = models.ForeignKey(Campaign,on_delete=models.CASCADE)
-    donatorId = models.ForeignKey(Donator,on_delete=models.CASCADE)
+    # donatorId = models.ForeignKey(Donator,on_delete=models.CASCADE)
     storageAddress = models.CharField(max_length=200)
     status = models.IntegerField(choices=DonationStatus.choices)
