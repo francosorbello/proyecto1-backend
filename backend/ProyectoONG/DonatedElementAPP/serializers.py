@@ -1,4 +1,5 @@
 from django.db.models import fields
+from DonationAPP.models import Donation
 from TagAPP.serializers import TagSerializer
 from .models import DonatedElement
 from rest_framework import serializers
@@ -22,6 +23,7 @@ from TagAPP.models import Tag
 
 class DonatedElementSerializer(serializers.ModelSerializer):
     # tags = TagSerializer(many = True)
+    donation = serializers.PrimaryKeyRelatedField(label="donation",queryset=Donation.objects.all())
     class Meta:
         model = DonatedElement
         fields = ['id','count','tags','description','donation']
