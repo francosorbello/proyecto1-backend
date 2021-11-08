@@ -48,7 +48,10 @@ class DonatedElementAPPView(APIView):
 #                    tag_obj = Tag.objects.get(name=tag["name"])
 #                    elem.tags.add(tag_obj)
             msg = "Donated Element created succesfully"
-            return Response({'message':msg, "id":newDonatedElement[0].id})
+            ids = []
+            for elem in newDonatedElement:
+                ids.append(elem.id)
+            return Response({'message':msg, "ids":ids})
         else:
             return Response(serializer.errors)
 
