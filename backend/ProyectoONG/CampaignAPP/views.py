@@ -29,10 +29,12 @@ class CampaignAPPView(APIView):
         if(serializer.is_valid()):
             #TODO: verificar si la fecha de inicio es menor que la de finalizacion
             newCampaign = serializer.create(serializer.validated_data)
+            if(newCampaign.initialDate > newCampaign.endDate):
+                return Response({'message': "la fecha de inicio es mayor a la de fin"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
             newCampaign.save()
 
             msg = "Campaign "+newCampaign.name+ " created succesfully"
-            # nUser.save()
             return Response({'message':msg,"id":newCampaign.id})
         else:
             return Response(serializer.errors)
