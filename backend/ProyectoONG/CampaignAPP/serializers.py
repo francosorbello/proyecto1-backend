@@ -7,6 +7,7 @@ class CampaignSerializer(serializers.Serializer):
     description = serializers.CharField(allow_blank=True)
     initialDate = serializers.DateField()
     endDate = serializers.DateField()
+    id = serializers.IntegerField(read_only=True)
 
     def create(self, validated_data):
         return Campaign(**validated_data)

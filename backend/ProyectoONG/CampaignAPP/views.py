@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.renderers import JSONRenderer
 from .models import Campaign
+import datetime
 
 from CampaignAPP.serializers import CampaignSerializer
 # Create your views here.
@@ -17,7 +18,15 @@ class CampaignAPPView(APIView):
         '''retorna una lista de 'Campaigns' o una especifica cuando se indica su id'''
         if(pk == None):
             campaigns = Campaign.objects.all()
-            return Response(list(campaigns.values()))
+            onlyActive = request.query_params.get('onlyActive')
+            if(onlyActive == "true"):
+                activeCampaigns = filter(lambda campaign : campaign.endDate > datetime.date.today(), campaigns)
+                responseList = []
+                for camp in list(activeCampaigns):
+                    responseList.append(CampaignSerializer(camp).data)
+                return Response(responseList)
+            else:
+                return Response(list(campaigns.values()))
         else:
             campaign = Campaign.objects.get(id=pk)
             return Response(CampaignSerializer(campaign).data)
