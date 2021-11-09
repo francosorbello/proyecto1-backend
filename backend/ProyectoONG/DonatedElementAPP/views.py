@@ -47,13 +47,13 @@ class DonatedElementAPPView(APIView):
 #                for tag in indData['tags']:
 #                    tag_obj = Tag.objects.get(name=tag["name"])
 #                    elem.tags.add(tag_obj)
-            msg = "Donated Element created succesfully"
+            msg = "Donated Element created successfully"
             ids = []
             for elem in newDonatedElement:
                 ids.append(elem.id)
             return Response({'message':msg, "ids":ids})
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self,request,pk=None):
         '''Actualiza un objeto con id pk'''
@@ -65,9 +65,9 @@ class DonatedElementAPPView(APIView):
                 tag_obj = Tag.objects.get(name=tag["name"])
                 delement.tags.add(tag_obj)
             
-            return Response({"message":"PUT succefully done","id":delement.id})
+            return Response({"message":"Donated element updated successfully","id":delement.id})
         else:
-            return Response(serializedElement.errors)
+            return Response(serializedElement.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # def patch(self,request,pk=None):
     #     '''Actualiza valores de un objeto en vez de por completo'''
@@ -83,5 +83,5 @@ class DonatedElementAPPView(APIView):
             #TODO: implementar error 404 cdo el objeto no existe
             return Response("")
         delement.delete()
-        msg = "DELETE en objeto con nombre "
+        msg = "Donated Element deleted successfully"
         return Response({"message":msg})

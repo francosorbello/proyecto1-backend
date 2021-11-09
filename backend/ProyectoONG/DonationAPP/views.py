@@ -33,11 +33,11 @@ class DonationAPPView(APIView):
         if(serializer.is_valid()):
             newDonation = serializer.create(serializer.validated_data)
             newDonation.save()
-            msg = "Donation created succesfully"
+            msg = "Donation created successfully"
             return Response({'message':msg,'id':newDonation.id})
         else:
             print(serializer.errors)
-            return Response(serializer.errors)
+            return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self,request,pk=None):
         '''Actualiza un objeto con id pk'''
@@ -45,9 +45,9 @@ class DonationAPPView(APIView):
         serializedDonation = DonationSerializer(donation,data=request.data)
         if(serializedDonation.is_valid()):
             serializedDonation.save()
-            return Response({"message":"Updated donation"})
+            return Response({"message":"Donation updated successfully"})
         else:
-            return Response(serializedDonation.errors)
+            return Response(serializedDonation.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def patch(self,request,pk=None):
         '''Actualiza valores de un objeto en vez de por completo'''
@@ -55,7 +55,7 @@ class DonationAPPView(APIView):
         serializedDonation = DonationSerializer(donation,data=request.data,partial=True)
         if(serializedDonation.is_valid()):
             serializedDonation.save()
-            msg = "PATCHed succesfuly"
+            msg = "Donation updated successfully"
             return Response({"message":msg})
         else:
             return JsonResponse(code=400, data="wrong parameters")
@@ -67,5 +67,5 @@ class DonationAPPView(APIView):
             #TODO: implementar error 404 cdo el objeto no existe
             return Response("")
         donation.delete()
-        msg = "DELETEd donation."
+        msg = "Donation deleted successfully"
         return Response({"message":msg})

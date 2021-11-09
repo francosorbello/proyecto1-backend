@@ -33,10 +33,10 @@ class TagAPPView(APIView):
             else:
                 newTag = serializer.create(serializer.validated_data)
                 newTag.save()
-                msg = "Tag "+newTag.name+ " created succesfully"
+                msg = "Tag "+newTag.name+ " created successfully"
                 return Response({'message':msg,"id":newTag.id})
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self,request,pk=None):
         '''Actualiza un objeto con id pk'''
@@ -44,9 +44,9 @@ class TagAPPView(APIView):
         serializedTag = TagSerializer(tag,data=request.data)
         if(serializedTag.is_valid()):
             serializedTag.save()
-            return Response({"message":"PUT funca piola"})
+            return Response({"message":"Tag updated successfully"})
         else:
-            return Response(serializedTag.errors)
+            return Response(serializedTag.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # def patch(self,request,pk=None):
     #     '''Actualiza valores de un objeto en vez de por completo'''
@@ -62,5 +62,5 @@ class TagAPPView(APIView):
             #TODO: implementar error 404 cdo el objeto no existe
             return Response("")
         tag.delete()
-        msg = "DELETE en objeto con nombre "+tag.name
+        msg = "Tag "+tag.name+" deleted successfully"
         return Response({"message":msg})

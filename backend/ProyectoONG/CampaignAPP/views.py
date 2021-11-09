@@ -36,17 +36,17 @@ class CampaignAPPView(APIView):
         serializer = self.serializer_class(data=request.data)
         
         if(serializer.is_valid()):
-            #TODO: verificar si la fecha de inicio es menor que la de finalizacion
             newCampaign = serializer.create(serializer.validated_data)
+
             if(newCampaign.initialDate > newCampaign.endDate):
-                return Response({'message': "la fecha de inicio es mayor a la de fin"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response({'message': "La fecha de inicio es posterior a la de fin"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             newCampaign.save()
 
-            msg = "Campaign "+newCampaign.name+ " created succesfully"
+            msg = "Campaign "+newCampaign.name+ " created successfully"
             return Response({'message':msg,"id":newCampaign.id})
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self,request,pk=None):
         '''Actualiza un objeto con id pk'''
@@ -54,9 +54,9 @@ class CampaignAPPView(APIView):
         serializedCampaign = CampaignSerializer(campaign,data=request.data)
         if(serializedCampaign.is_valid()):
             serializedCampaign.save()
-            return Response({"message":"PUT funca piola"})
+            return Response({"message":"Campaign updated successfully"})
         else:
-            return Response(serializedCampaign.errors)
+            return Response(serializedCampaign.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def patch(self,request,pk=None):
         '''Actualiza un objeto con id pk'''
@@ -64,9 +64,9 @@ class CampaignAPPView(APIView):
         serializedCampaign = CampaignSerializer(campaign,data=request.data,partial=True)
         if(serializedCampaign.is_valid()):
             serializedCampaign.save()
-            return Response({"message":"PATCH funca piola"})
+            return Response({"message":"Campaign updated successfully"})
         else:
-            return Response(serializedCampaign.errors)
+            return Response(serializedCampaign.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self,request,pk=None):
 
@@ -75,5 +75,5 @@ class CampaignAPPView(APIView):
             #TODO: implementar error 404 cdo el objeto no existe
             return Response("")
         campaign.delete()
-        msg = "DELETE en objeto con nombre "+campaign.name
+        msg = "Campaign "+campaign.name+ " deleted successfully"
         return Response({"message":msg})

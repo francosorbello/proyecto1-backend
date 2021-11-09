@@ -33,14 +33,14 @@ class DonatorAPPView(APIView):
             donatorMail = serializer.validated_data.get("mail")
             if Donator.objects.filter(name=donatorMail).exists():
                 #TODO: añadir error correcto
-                return Response({'message': "El tag ya existe"})
+                return Response({'message': "El mail ya existe"})
             else:
                 newDonator = serializer.create(serializer.validated_data)
                 newDonator.save()
-                msg = "Donator "+newDonator.name+ " created succesfully"
+                msg = "Donator "+newDonator.name+ " created successfully"
                 return Response({'message':msg})
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self,request,pk=None):
         '''Actualiza un objeto con id pk'''
@@ -48,9 +48,9 @@ class DonatorAPPView(APIView):
         serializedDonator = DonatorSerializer(donator,data=request.data)
         if(serializedDonator.is_valid()):
             serializedDonator.save()
-            return Response({"message":"PUT funca piola"})
+            return Response({"message":"Donator updated successfully"})
         else:
-            return Response(serializedDonator.errors)
+            return Response(serializedDonator.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # def patch(self,request,pk=None):
     #     '''Actualiza valores de un objeto en vez de por completo'''
@@ -66,5 +66,5 @@ class DonatorAPPView(APIView):
             #TODO: implementar error 404 cdo el objeto no existe
             return Response("")
         donator.delete()
-        msg = "DELETE en objeto con nombre "+donator.name
+        msg = "Donator "+donator.name+" deleted successfully"
         return Response({"message":msg})

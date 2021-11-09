@@ -33,10 +33,10 @@ class UserAPPView(APIView):
             else:
                 newUser = serializer.create(serializer.validated_data)
                 newUser.save()
-                msg = "User "+newUser.name+ " created succesfully"
+                msg = "User "+newUser.name+ " created successfully"
                 return Response({'message':msg})
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self,request,pk=None):
         '''Actualiza un objeto con id pk'''
@@ -44,7 +44,7 @@ class UserAPPView(APIView):
         serializedUser = UserSerializer(user,data=request.data)
         if(serializedUser.is_valid()):
             serializedUser.save()
-            return Response({"message":"PUT funca piola"})
+            return Response({"message":"User updated successfully"})
         else:
             return Response(serializedUser.errors)
 
@@ -62,5 +62,5 @@ class UserAPPView(APIView):
             #TODO: implementar error 404 cdo el objeto no existe
             return Response("")
         user.delete()
-        msg = "DELETE en objeto con nombre "+user.name
+        msg = "User "+user.name+" deleted successfully"
         return Response({"message":msg})

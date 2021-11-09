@@ -6,11 +6,11 @@ from DonatorAPP.models import Donator
 class Donation(models.Model):
     class DonationStatus(models.IntegerChoices):
         '''Enum con los estados posibles de una donacion'''
-        PENDING = 1
-        RECEIVED = 2
-        ASSIGNED = 3
-        DELIVERED = 4
-        EXPIRED = 5
+        PENDIENTE = 1
+        ASIGNADA = 2
+        RECIBIDA = 3
+        ENTREGADA = 4
+        VENCIDA = 5
 
     # userId = models.ForeignKey(User,on_delete=models.CASCADE)
     campaignId = models.ForeignKey(Campaign,on_delete=models.CASCADE)
