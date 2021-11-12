@@ -24,7 +24,7 @@ from TagAPP.models import Tag
 class DonatedElementSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many = True)
     # donation = serializers.PrimaryKeyRelatedField(label="donation",queryset=Donation.objects.all())
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(required = False)
     class Meta:
         model = DonatedElement
         fields = ['id','count','tags','description']
@@ -34,8 +34,3 @@ class DonatedElementSerializer(serializers.ModelSerializer):
         donatedElement = DonatedElement.objects.create(**validated_data)
         donatedElement.tags.set(tags_data)
         return donatedElement
-    
-    def validate(self, attrs):
-        print("validate#######")
-        print(attrs)
-        return super().validate(attrs)
