@@ -28,30 +28,27 @@ class DonatedElementAPPView(APIView):
     
     def post(self,request):
         """Recibe datos dentro del request para guardar un nuevo 'DonatedElement' en la base de datos"""
-        serializer = self.serializer_class(data=request.data,many=True)
+        serializer = self.serializer_class(data=request.data)
         if(serializer.is_valid()):
             newDonatedElement = serializer.create(serializer.validated_data)
-            print(newDonatedElement)
-            print("######")
-            print(request.data)
-            #newDonatedElement.save()
-            i = 0
-            for elem in newDonatedElement:
-                elem.save()
-                for tag in request.data[i]['tags']:
-                    tag_obj = Tag.objects.get(name=tag["name"])
-                    elem.tags.add(tag_obj)
-                i+=1                
+            newDonatedElement.save()
+            # i = 0
+            # for elem in newDonatedElement:
+            #     elem.save()
+            #     for tag in request.data[i]['tags']:
+            #         tag_obj = Tag.objects.get(name=tag["name"])
+            #         elem.tags.add(tag_obj)
+            #     i+=1                
 
 #            for indData in request.data:
 #                for tag in indData['tags']:
 #                    tag_obj = Tag.objects.get(name=tag["name"])
 #                    elem.tags.add(tag_obj)
             msg = "Donated Element created successfully"
-            ids = []
-            for elem in newDonatedElement:
-                ids.append(elem.id)
-            return Response({'message':msg, "ids":ids})
+            # ids = []
+            # for elem in newDonatedElement:
+            #     ids.append(elem.id)
+            return Response({'message':msg, "ids":newDonatedElement.id})
         else:
             return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
