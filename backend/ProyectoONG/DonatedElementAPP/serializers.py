@@ -22,9 +22,20 @@ from TagAPP.models import Tag
 #         return instance
 
 class DonatedElementSerializer(serializers.ModelSerializer):
-    # tags = TagSerializer(many = True)
-    donation = serializers.PrimaryKeyRelatedField(label="donation",queryset=Donation.objects.all())
+    tags = TagSerializer(many = True)
+    # donation = serializers.PrimaryKeyRelatedField(label="donation",queryset=Donation.objects.all())
+    id = serializers.IntegerField()
     class Meta:
         model = DonatedElement
-        fields = ['id','count','tags','description','donation']
-        depth = 1
+        fields = ['id','count','tags','description']
+
+    def create(self, validated_data):
+        tags_data = validated_data.pop('tags')
+        donatedElement = DonatedElement.objects.create(**validated_data)
+        donatedElement.tags.set(tags_data)
+        return donatedElement
+    
+    def validate(self, attrs):
+        print("validate#######")
+        print(attrs)
+        return super().validate(attrs)

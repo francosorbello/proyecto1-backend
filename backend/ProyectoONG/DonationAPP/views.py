@@ -30,6 +30,7 @@ class DonationAPPView(APIView):
     def post(self,request):
         """Recibe datos dentro del request para guardar una nueva 'Donation' en la base de datos"""
         serializer = self.serializer_class(data=request.data)
+        print(request.data)
         if(serializer.is_valid()):
             newDonation = serializer.create(serializer.validated_data)
             newDonation.save()
