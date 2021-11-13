@@ -21,7 +21,8 @@ class DonationAPPView(APIView):
         '''retorna una lista de 'Donations' o una especifica cuando se indica su id'''
         if(pk == None):
             donations = Donation.objects.all()
-            return Response(list(donations.values()))
+            serializedDonations = DonationSerializer(donations,many=True)
+            return Response(serializedDonations.data)
         else:
             donation = Donation.objects.get(id=pk)
             serialDonation = DonationSerializer(donation)
