@@ -53,6 +53,10 @@ class DonationAPPView(APIView):
         serializedDonation = DonationSerializer(donation,data=request.data)
         if(serializedDonation.is_valid()):
             serializedDonation.save()
+            console.log(serializedDonation)
+#            donatedElems = DonatedElement.objects.filter(donation=serializedDonation.id)
+#            for elem in donatedElems:
+#                donatedElemIds.append(elem.id)
             return Response({"message":"Donation updated successfully"})
         else:
             return Response(serializedDonation.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -62,9 +66,15 @@ class DonationAPPView(APIView):
         donation = Donation.objects.get(id=pk)
         serializedDonation = DonationSerializer(donation,data=request.data,partial=True)
         if(serializedDonation.is_valid()):
-            serializedDonation.save()
+            newDonation = serializedDonation.save()
+            print(newDonation.id)
+            donatedElems = DonatedElement.objects.filter(donation=newDonation.id)
+            donatedElemIds = []
+            for elem in donatedElems:
+                donatedElemIds.append(elem.id)
+
             msg = "Donation updated successfully"
-            return Response({"message":msg})
+            return Response({"message":msg,"id":newDonation.id,"donatedElemIds":donatedElemIds})
         else:
             return JsonResponse(code=400, data="wrong parameters")
 
