@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.renderers import JSONRenderer
+
+from DonatedElementAPP.models import DonatedElement
 from .models import Donation
 
 from .serializers import DonationSerializer
@@ -31,12 +33,16 @@ class DonationAPPView(APIView):
     def post(self,request):
         """Recibe datos dentro del request para guardar una nueva 'Donation' en la base de datos"""
         serializer = self.serializer_class(data=request.data)
-        print(request.data)
         if(serializer.is_valid()):
             newDonation = serializer.create(serializer.validated_data)
             newDonation.save()
+            donatedElemIds = []
+            donatedElems = DonatedElement.objects.filter(donation=newDonation.id)
+            for elem in donatedElems:
+                donatedElemIds.append(elem.id)
+            print(donatedElemIds)
             msg = "Donation created successfully"
-            return Response({'message':msg,'id':newDonation.id})
+            return Response({'message':msg,'id':newDonation.id,'donatedElemIds':donatedElemIds})
         else:
             print(serializer.errors)
             return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
