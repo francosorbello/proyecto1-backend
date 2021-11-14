@@ -81,7 +81,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'ProyectoONG.settings'
 django.setup()
 
 ...
-```
+```python
 
 Además, buscar la línea "html_theme = 'alabaster'" y cambiar por "sphinx_rtd_theme"
 
@@ -98,3 +98,10 @@ Esto añade archivos que describen qué partes del código documentar. Una vez h
 ```
 make html
 ```
+
+## Sources
+
+https://github.com/finsberg/sphinx-tutorial
+http://www.marinamele.com/2014/03/document-your-django-projects.html
+https://www.freecodecamp.org/news/sphinx-for-django-documentation-2454e924b3bc/
+http://www.wonderousponder.com/how-to-document-django-applications-with-sphinx/
