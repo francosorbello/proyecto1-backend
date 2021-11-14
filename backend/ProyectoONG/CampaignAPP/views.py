@@ -15,7 +15,26 @@ class CampaignAPPView(APIView):
     serializer_class = CampaignSerializer
 
     def get(self,request,format = None,pk=None):
-        '''retorna una lista de 'Campaigns' o una especifica cuando se indica su id'''
+        '''
+        Retorna una lista de campañas o una especifica cuando se indica su id.
+
+        Si el request contiene un atributo "onlyActive" y éste es verdadero, sólo se
+        retornan aquellas campañas cuya fecha de fin sea mayor a la fecha actual.
+        
+        Parameters
+        -----------
+
+        request
+            objeto con información de la petición realizada a la API.
+        pk: int
+            id de un tag especifico.
+        
+        Returns
+        ---------
+
+        Response
+            Json con una lista de objetos o un objeto individual.
+        '''
         if(pk == None):
             campaigns = Campaign.objects.all()
             onlyActive = request.query_params.get('onlyActive')
@@ -32,7 +51,23 @@ class CampaignAPPView(APIView):
             return Response(CampaignSerializer(campaign).data)
     
     def post(self,request):
-        """Recibe datos dentro del request para guardar una nueva 'Campaign' en la base de datos"""
+        """
+        Recibe datos dentro del request para guardar una nueva campaña en la base de datos.
+
+        Si la fecha de inicio es mayor a la fecha de fin, retorna error 500.
+        
+        Parameters
+        ----------
+        
+        request
+            objeto con información de la petición realizada a la API.
+
+        Returns
+        -------
+        
+        Response
+            JSON con un mensaje de confirmación y el id de la nueva campaña
+        """
         serializer = self.serializer_class(data=request.data)
         
         if(serializer.is_valid()):
@@ -49,7 +84,23 @@ class CampaignAPPView(APIView):
             return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self,request,pk=None):
-        '''Actualiza un objeto con id pk'''
+        '''
+        Actualiza una campaña con id pk.
+
+        Parameters
+        ----------
+        
+        request
+            objeto con información de la petición realizada a la API.
+        pk
+            id de la campaña a editar
+
+        Returns
+        ------
+        
+        Response
+            JSON con un mensaje que indica que la campaña fue actualizada correctamente
+        '''
         campaign = Campaign.objects.get(id=pk)
         serializedCampaign = CampaignSerializer(campaign,data=request.data)
         if(serializedCampaign.is_valid()):
@@ -59,7 +110,25 @@ class CampaignAPPView(APIView):
             return Response(serializedCampaign.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def patch(self,request,pk=None):
-        '''Actualiza un objeto con id pk'''
+        '''
+        Actualiza una campaña con id pk.
+
+        A diferencia del put, la información dentro de request puede ser parcial, es decir, no tener todos los campos del objeto.
+
+        Parameters
+        ----------
+        
+        request
+            objeto con información de la petición realizada a la API.
+        pk
+            id del tag a editar
+
+        Returns
+        ------
+        
+        Response
+            JSON con un mensaje que indica que el tag fue actualizado correctamente
+        '''
         campaign = Campaign.objects.get(id=pk)
         serializedCampaign = CampaignSerializer(campaign,data=request.data,partial=True)
         if(serializedCampaign.is_valid()):
@@ -69,11 +138,28 @@ class CampaignAPPView(APIView):
             return Response(serializedCampaign.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self,request,pk=None):
+        """
+        Elimina una campaña de la base de datos.
 
+        Eliminar una campaña también borrará las donaciones (y elementos donados) asociadas.
+
+        Parameters
+        ----------
+        
+        request
+            objeto con información de la petición realizada a la API.
+        pk
+            id de la campaña a eliminar
+
+        Returns
+        --------
+
+        Response
+            JSON con mensaje que indica que la campaña fue creada correctamente.
+        """
         campaign = Campaign.objects.get(id=pk)
         if(campaign == None):
-            #TODO: implementar error 404 cdo el objeto no existe
-            return Response("")
+            return Response({"message":"La campaña que deseas borrar no existe"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         campaign.delete()
         msg = "Campaign "+campaign.name+ " deleted successfully"
         return Response({"message":msg})

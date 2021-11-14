@@ -27,7 +27,8 @@ class TagAPPView(APIView):
         Retorna una lista de tags o uno especifico cuando se indica su id.
         
         Parameters
-        ----------
+        -----------
+
         request
             objeto con información de la petición realizada a la API.
         pk: int
@@ -35,6 +36,7 @@ class TagAPPView(APIView):
         
         Returns
         ---------
+
         Response
             Json con una lista de objetos o un objeto individual.
         '''
@@ -51,11 +53,13 @@ class TagAPPView(APIView):
         
         Parameters
         ----------
+        
         request
             objeto con información de la petición realizada a la API.
 
         Returns
         -------
+        
         Response
             JSON con un mensaje de confirmación y el id del nuevo tag
         """
@@ -79,6 +83,7 @@ class TagAPPView(APIView):
 
         Parameters
         ----------
+        
         request
             objeto con información de la petición realizada a la API.
         pk
@@ -86,6 +91,7 @@ class TagAPPView(APIView):
 
         Returns
         ------
+        
         Response
             JSON con un mensaje que indica que el tag fue actualizado correctamente
         '''
@@ -110,10 +116,17 @@ class TagAPPView(APIView):
 
         Parameters
         ----------
+        
         request
             objeto con información de la petición realizada a la API.
         pk
             id del tag a eliminar
+
+        Returns
+        --------
+
+        Response
+            JSON con mensaje que indica que el tag fue creado correctamente.
         """
         tag = Tag.objects.get(id=pk)
         if(tag == None):
