@@ -16,11 +16,36 @@ class DonationStatusView(APIView):
         return Response(Donation.DonationStatus.choices)
 
 class DonationAPPView(APIView):
+    """
+    View del modelo Donation.
 
+    Contiene los métodos para recibir las peticiones REST.
+
+    Attributes
+    ---------
+    serializer_class
+        Serializador del objeto Donation.
+    """
     serializer_class = DonationSerializer
 
     def get(self,request,format = None,pk=None):
-        '''retorna una lista de 'Donations' o una especifica cuando se indica su id'''
+        '''
+        Retorna una lista de Donaciones o una especifico cuando se indica su id.
+        
+        Parameters
+        -----------
+
+        request
+            objeto con información de la petición realizada a la API.
+        pk: int
+            id de una Donación especifica.
+        
+        Returns
+        ---------
+
+        Response
+            Json con una lista de objetos o un objeto individual.
+        '''
         if(pk == None):
             donations = Donation.objects.all()
             serializedDonations = DonationSerializer(donations,many=True)
@@ -31,7 +56,22 @@ class DonationAPPView(APIView):
             return Response(serialDonation.data)
     
     def post(self,request):
-        """Recibe datos dentro del request para guardar una nueva 'Donation' en la base de datos"""
+        """
+        Recibe datos dentro del request para guardar una nueva Donacion en la base de datos.
+        
+        Parameters
+        ----------
+        
+        request
+            objeto con información de la petición realizada a la API.
+
+        Returns
+        -------
+        
+        Response
+            JSON con un mensaje de confirmación, el id de la nueva Donación y una lista
+            de ids de los nuevos Elementos Donados.
+        """
         serializer = self.serializer_class(data=request.data)
         if(serializer.is_valid()):
             newDonation = serializer.create(serializer.validated_data)
@@ -40,7 +80,6 @@ class DonationAPPView(APIView):
             donatedElems = DonatedElement.objects.filter(donation=newDonation.id)
             for elem in donatedElems:
                 donatedElemIds.append(elem.id)
-            print(donatedElemIds)
             msg = "Donation created successfully"
             return Response({'message':msg,'id':newDonation.id,'donatedElemIds':donatedElemIds})
         else:
@@ -48,21 +87,51 @@ class DonationAPPView(APIView):
             return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self,request,pk=None):
-        '''Actualiza un objeto con id pk'''
+        '''
+        Actualiza una Donación con id pk.
+
+        Parameters
+        ----------
+        
+        request
+            objeto con información de la petición realizada a la API.
+        pk
+            id de la Donación a editar.
+
+        Returns
+        ------
+        
+        Response
+            JSON con un mensaje que indica que la Donación fue actualizada correctamente.
+        '''
         donation = Donation.objects.get(id=pk)
         serializedDonation = DonationSerializer(donation,data=request.data)
         if(serializedDonation.is_valid()):
             serializedDonation.save()
-            console.log(serializedDonation)
-#            donatedElems = DonatedElement.objects.filter(donation=serializedDonation.id)
-#            for elem in donatedElems:
-#                donatedElemIds.append(elem.id)
-            return Response({"message":"Donation updated successfully"})
         else:
             return Response(serializedDonation.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def patch(self,request,pk=None):
-        '''Actualiza valores de un objeto en vez de por completo'''
+        '''
+        Actualiza una Donación con id pk.
+
+        A diferencia del put, la información dentro de request puede ser parcial, 
+        es decir, no tener todos los campos del objeto.
+
+        Parameters
+        ----------
+        
+        request
+            objeto con información de la petición realizada a la API.
+        pk
+            id de la Donación a editar.
+
+        Returns
+        ------
+        
+        Response
+            JSON con un mensaje que indica que la Donación fue actualizada correctamente.
+        '''
         donation = Donation.objects.get(id=pk)
         serializedDonation = DonationSerializer(donation,data=request.data,partial=True)
         if(serializedDonation.is_valid()):
@@ -79,7 +148,25 @@ class DonationAPPView(APIView):
             return JsonResponse(code=400, data="wrong parameters")
 
     def delete(self,request,pk=None):
+        """
+        Elimina una Donación de la base de datos.
 
+        Eliminar una Donación también borrará las donaciones (y elementos donados) asociadas.
+
+        Parameters
+        ----------
+        
+        request
+            objeto con información de la petición realizada a la API.
+        pk
+            id de la Donación a eliminar
+
+        Returns
+        --------
+
+        Response
+            JSON con mensaje que indica que la Donación fue eliminada correctamente.
+        """
         donation = Donation.objects.get(id=pk)
         if(donation == None):
             #TODO: implementar error 404 cdo el objeto no existe

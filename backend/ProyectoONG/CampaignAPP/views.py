@@ -113,7 +113,8 @@ class CampaignAPPView(APIView):
         '''
         Actualiza una campaña con id pk.
 
-        A diferencia del put, la información dentro de request puede ser parcial, es decir, no tener todos los campos del objeto.
+        A diferencia del put, la información dentro de request puede ser parcial, 
+        es decir, no tener todos los campos del objeto.
 
         Parameters
         ----------
@@ -121,13 +122,13 @@ class CampaignAPPView(APIView):
         request
             objeto con información de la petición realizada a la API.
         pk
-            id del tag a editar
+            id de la Campaña a editar.
 
         Returns
         ------
         
         Response
-            JSON con un mensaje que indica que el tag fue actualizado correctamente
+            JSON con un mensaje que indica que la Campaña fue actualizada correctamente.
         '''
         campaign = Campaign.objects.get(id=pk)
         serializedCampaign = CampaignSerializer(campaign,data=request.data,partial=True)
@@ -155,7 +156,7 @@ class CampaignAPPView(APIView):
         --------
 
         Response
-            JSON con mensaje que indica que la campaña fue creada correctamente.
+            JSON con mensaje que indica que la campaña fue eliminada correctamente.
         """
         campaign = Campaign.objects.get(id=pk)
         if(campaign == None):

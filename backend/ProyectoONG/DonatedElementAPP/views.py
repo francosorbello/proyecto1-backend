@@ -8,7 +8,6 @@ from .models import DonatedElement
 from .models import Tag
 
 from DonatedElementAPP.serializers import DonatedElementSerializer
-# Create your views here.
 
 class DonatedElementAPPView(APIView):
 
@@ -114,13 +113,13 @@ class DonatedElementAPPView(APIView):
         request
             objeto con información de la petición realizada a la API.
         pk
-            id del tag a eliminar
+            id del Elemento Donado a eliminar.
 
         Returns
         --------
 
         Response
-            JSON con mensaje que indica que el Elemento Donado fue creado correctamente.
+            JSON con mensaje que indica que el Elemento Donado fue eliminado correctamente.
         """
         delement = DonatedElement.objects.get(id=pk)
         if(delement == None):

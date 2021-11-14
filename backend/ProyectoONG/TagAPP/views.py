@@ -126,7 +126,7 @@ class TagAPPView(APIView):
         --------
 
         Response
-            JSON con mensaje que indica que el tag fue creado correctamente.
+            JSON con mensaje que indica que el tag fue eliminado correctamente.
         """
         tag = Tag.objects.get(id=pk)
         if(tag == None):
