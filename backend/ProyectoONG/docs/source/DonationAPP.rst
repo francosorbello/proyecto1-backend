@@ -11,22 +11,6 @@ Subpackages
 Submodules
 ----------
 
-DonationAPP\.admin module
--------------------------
-
-.. automodule:: DonationAPP.admin
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-DonationAPP\.apps module
-------------------------
-
-.. automodule:: DonationAPP.apps
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 DonationAPP\.models module
 --------------------------
 

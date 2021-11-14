@@ -1,31 +1,8 @@
 CampaignAPP package
 ===================
 
-Subpackages
------------
-
-.. toctree::
-
-    CampaignAPP.migrations
-
 Submodules
 ----------
-
-CampaignAPP\.admin module
--------------------------
-
-.. automodule:: CampaignAPP.admin
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-CampaignAPP\.apps module
-------------------------
-
-.. automodule:: CampaignAPP.apps
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 CampaignAPP\.models module
 --------------------------
@@ -51,13 +28,6 @@ CampaignAPP\.tests module
     :undoc-members:
     :show-inheritance:
 
-CampaignAPP\.urls module
-------------------------
-
-.. automodule:: CampaignAPP.urls
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 CampaignAPP\.views module
 -------------------------

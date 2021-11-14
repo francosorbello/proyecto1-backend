@@ -1,31 +1,8 @@
 DonatedElementAPP package
 =========================
 
-Subpackages
------------
-
-.. toctree::
-
-    DonatedElementAPP.migrations
-
 Submodules
 ----------
-
-DonatedElementAPP\.admin module
--------------------------------
-
-.. automodule:: DonatedElementAPP.admin
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-DonatedElementAPP\.apps module
-------------------------------
-
-.. automodule:: DonatedElementAPP.apps
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 DonatedElementAPP\.models module
 --------------------------------
@@ -47,14 +24,6 @@ DonatedElementAPP\.tests module
 -------------------------------
 
 .. automodule:: DonatedElementAPP.tests
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-DonatedElementAPP\.urls module
-------------------------------
-
-.. automodule:: DonatedElementAPP.urls
     :members:
     :undoc-members:
     :show-inheritance:
