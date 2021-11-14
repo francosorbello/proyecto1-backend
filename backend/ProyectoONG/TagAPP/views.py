@@ -9,11 +9,35 @@ from TagAPP.serializers import TagSerializer
 # Create your views here.
 
 class TagAPPView(APIView):
+    """
+    View del modelo Tag.
 
+    Contiene los métodos para recibir las peticiones REST.
+
+    Attributes
+    ---------
+    serializer_class
+        Serializador del objeto Tag.
+    """
+    
     serializer_class = TagSerializer
 
     def get(self,request,format = None,pk=None):
-        '''retorna una lista de tags o uno especifico cuando se indica su id'''
+        '''
+        Retorna una lista de tags o uno especifico cuando se indica su id.
+        
+        Parameters
+        ----------
+        request
+            objeto con información de la petición realizada a la API.
+        pk: int
+            id de un tag especifico.
+        
+        Returns
+        ---------
+        Response
+            Json con una lista de objetos o un objeto individual.
+        '''
         if(pk == None):
             tags = Tag.objects.all()
             return Response(list(tags.values()))
@@ -22,14 +46,25 @@ class TagAPPView(APIView):
             return Response(TagSerializer(tag).data)
     
     def post(self,request):
-        """Recibe datos dentro del request para guardar un nuevo Tag en la base de datos"""
+        """
+        Recibe datos dentro del request para guardar un nuevo Tag en la base de datos
+        
+        Parameters
+        ----------
+        request
+            objeto con información de la petición realizada a la API.
+
+        Returns
+        -------
+        Response
+            JSON con un mensaje de confirmación y el id del nuevo tag
+        """
         serializer = self.serializer_class(data=request.data)
         
         if(serializer.is_valid()):
             tagName = serializer.validated_data.get("name")
             if Tag.objects.filter(name=tagName).exists():
-                #TODO: añadir error correcto
-                return Response({'message': "El tag ya existe"})
+                return Response({"message":"El tag solicitado ya existe"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
                 newTag = serializer.create(serializer.validated_data)
                 newTag.save()
@@ -39,7 +74,21 @@ class TagAPPView(APIView):
             return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self,request,pk=None):
-        '''Actualiza un objeto con id pk'''
+        '''
+        Actualiza un tag con id pk.
+
+        Parameters
+        ----------
+        request
+            objeto con información de la petición realizada a la API.
+        pk
+            id del tag a editar
+
+        Returns
+        ------
+        Response
+            JSON con un mensaje que indica que el tag fue actualizado correctamente
+        '''
         tag = Tag.objects.get(id=pk)
         serializedTag = TagSerializer(tag,data=request.data)
         if(serializedTag.is_valid()):
@@ -56,11 +105,19 @@ class TagAPPView(APIView):
     #     return Response({"message":msg})
 
     def delete(self,request,pk=None):
+        """
+        Elimina un tag de la base de datos.
 
+        Parameters
+        ----------
+        request
+            objeto con información de la petición realizada a la API.
+        pk
+            id del tag a eliminar
+        """
         tag = Tag.objects.get(id=pk)
         if(tag == None):
-            #TODO: implementar error 404 cdo el objeto no existe
-            return Response("")
+            return Response({"message":"El tag solicitado no existe"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         tag.delete()
         msg = "Tag "+tag.name+" deleted successfully"
         return Response({"message":msg})

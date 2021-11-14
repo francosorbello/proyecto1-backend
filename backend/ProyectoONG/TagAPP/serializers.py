@@ -14,6 +14,9 @@ from rest_framework import serializers
 #         return instance
     
 class TagSerializer(serializers.ModelSerializer):
+    """
+    Serializador del objeto Tag
+    """
     class Meta:
         model = Tag
         fields = '__all__'
