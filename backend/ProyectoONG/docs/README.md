@@ -70,7 +70,7 @@ make html
 
 En el archivo conf.py, añadir las siguientes líneas:
 
-```
+```python
 ...
 
 import os
@@ -81,7 +81,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'ProyectoONG.settings'
 django.setup()
 
 ...
-```python
+```
 
 Además, buscar la línea "html_theme = 'alabaster'" y cambiar por "sphinx_rtd_theme"
 
