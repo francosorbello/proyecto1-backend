@@ -49,7 +49,7 @@ class TagAPPView(APIView):
     
     def post(self,request):
         """
-        Recibe datos dentro del request para guardar un nuevo Tag en la base de datos
+        Recibe datos dentro del request para guardar un nuevo Tag en la base de datos.
         
         Parameters
         ----------
@@ -61,7 +61,7 @@ class TagAPPView(APIView):
         -------
         
         Response
-            JSON con un mensaje de confirmación y el id del nuevo tag
+            JSON con un mensaje de confirmación y el id del nuevo Tag
         """
         serializer = self.serializer_class(data=request.data)
         

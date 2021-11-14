@@ -22,14 +22,35 @@ from TagAPP.models import Tag
 #         return instance
 
 class DonatedElementSerializer(serializers.ModelSerializer):
+    """
+    Serializador de un objeto Elemento Donado
+
+    Attributes
+    -----------
+
+    tags
+        lista de Tag(s) relacionados con el elemento donado.
+    id
+        id del Elemento Donado serializado.
+    """
     tags = TagSerializer(many = True)
     # donation = serializers.PrimaryKeyRelatedField(label="donation",queryset=Donation.objects.all())
     id = serializers.IntegerField(required = False)
+
     class Meta:
         model = DonatedElement
         fields = ['id','count','tags','description']
 
     def create(self, validated_data):
+        """
+        Crea un objeto Elemento Donado y setea los tags asociados.
+
+        Parameters
+        -----------
+
+        validated_data
+            Información para crear el nuevo Elemento Donado.
+        """
         tags_data = validated_data.pop('tags')
         donatedElement = DonatedElement.objects.create(**validated_data)
         donatedElement.tags.set(tags_data)

@@ -15,7 +15,23 @@ class DonatedElementAPPView(APIView):
     serializer_class = DonatedElementSerializer
 
     def get(self,request,format = None,pk=None):
-        '''retorna una lista de 'DonatedElements' o uno especifico cuando se indica su id'''
+        '''
+        Retorna una lista de Elementos Donados o uno especifico cuando se indica su id.
+        
+        Parameters
+        -----------
+
+        request
+            objeto con información de la petición realizada a la API.
+        pk: int
+            id de un Elemento Donado especifico.
+        
+        Returns
+        ---------
+
+        Response
+            Json con una lista de objetos o un objeto individual.
+        '''
         if(pk == None):
             delements = DonatedElement.objects.all()
             elements_list = []
@@ -27,33 +43,48 @@ class DonatedElementAPPView(APIView):
             return Response(DonatedElementSerializer(delement).data)
     
     def post(self,request):
-        """Recibe datos dentro del request para guardar un nuevo 'DonatedElement' en la base de datos"""
+        """
+        Recibe datos dentro del request para guardar un nuevo Elemento Donado en la base de datos.
+        
+        Parameters
+        ----------
+        
+        request
+            objeto con información de la petición realizada a la API.
+
+        Returns
+        -------
+        
+        Response
+            JSON con un mensaje de confirmación y el id del nuevo Elemento Donado.
+        """
         serializer = self.serializer_class(data=request.data)
         if(serializer.is_valid()):
             newDonatedElement = serializer.create(serializer.validated_data)
             newDonatedElement.save()
-            # i = 0
-            # for elem in newDonatedElement:
-            #     elem.save()
-            #     for tag in request.data[i]['tags']:
-            #         tag_obj = Tag.objects.get(name=tag["name"])
-            #         elem.tags.add(tag_obj)
-            #     i+=1                
-
-#            for indData in request.data:
-#                for tag in indData['tags']:
-#                    tag_obj = Tag.objects.get(name=tag["name"])
-#                    elem.tags.add(tag_obj)
             msg = "Donated Element created successfully"
-            # ids = []
-            # for elem in newDonatedElement:
-            #     ids.append(elem.id)
             return Response({'message':msg, "ids":newDonatedElement.id})
         else:
             return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self,request,pk=None):
-        '''Actualiza un objeto con id pk'''
+        '''
+        Actualiza un Elemento Donado con id pk.
+
+        Parameters
+        ----------
+        
+        request
+            objeto con información de la petición realizada a la API.
+        pk
+            id del Elemento Donado a editar
+
+        Returns
+        ------
+        
+        Response
+            JSON con un mensaje que indica que el Elemento Donado fue actualizado correctamente
+        '''
         delement = DonatedElement.objects.get(id=pk)
         serializedElement = DonatedElementSerializer(delement,data=request.data)
         if(serializedElement.is_valid()):
@@ -74,11 +105,26 @@ class DonatedElementAPPView(APIView):
     #     return Response({"message":msg})
 
     def delete(self,request,pk=None):
+        """
+        Elimina un Elemento Donado de la base de datos.
 
+        Parameters
+        ----------
+        
+        request
+            objeto con información de la petición realizada a la API.
+        pk
+            id del tag a eliminar
+
+        Returns
+        --------
+
+        Response
+            JSON con mensaje que indica que el Elemento Donado fue creado correctamente.
+        """
         delement = DonatedElement.objects.get(id=pk)
         if(delement == None):
-            #TODO: implementar error 404 cdo el objeto no existe
-            return Response("")
+            return Response("El elemento donado no existe.",status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         delement.delete()
         msg = "Donated Element deleted successfully"
         return Response({"message":msg})
