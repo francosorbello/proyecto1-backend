@@ -1,8 +1,7 @@
 import json
-from django.http import response
 from django.test import TestCase
-from django.test.client import Client
 from TagAPP.models import Tag
+from rest_framework.test import APIClient
 
 class TestViews(TestCase):
     """
@@ -13,7 +12,7 @@ class TestViews(TestCase):
         """
         Se ejecuta antes de cada test.
         """
-        self.client = Client()
+        self.client = APIClient()
         self.all_url = '/api/tag-api/'
         self.tags = Tag.objects.create(
             name="invierno"
