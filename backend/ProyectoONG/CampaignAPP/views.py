@@ -74,7 +74,7 @@ class CampaignAPPView(APIView):
             newCampaign = serializer.create(serializer.validated_data)
 
             if(newCampaign.initialDate > newCampaign.endDate):
-                return Response({'message': "La fecha de inicio es posterior a la de fin"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response({'message': "La fecha de inicio es posterior a la de fin"},status=status.HTTP_400_BAD_REQUEST)
 
             newCampaign.save()
 

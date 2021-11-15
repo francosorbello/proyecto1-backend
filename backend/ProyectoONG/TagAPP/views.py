@@ -67,8 +67,8 @@ class TagAPPView(APIView):
         
         if(serializer.is_valid()):
             tagName = serializer.validated_data.get("name")
-            if Tag.objects.filter(name=tagName).exists():
-                return Response({"message":"El tag solicitado ya existe"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            if Tag.objects.filter(name=tagName.lower()).exists():
+                return Response({"message":"El tag solicitado ya existe"},status=status.HTTP_400_BAD_REQUEST)
             else:
                 newTag = serializer.create(serializer.validated_data)
                 newTag.save()
