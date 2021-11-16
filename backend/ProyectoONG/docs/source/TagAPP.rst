@@ -26,10 +26,10 @@ TagAPP\.serializers module
     :undoc-members:
     :show-inheritance:
 
-TagAPP\.tests module
+TagAPP\tests module
 --------------------
 
-.. automodule:: TagAPP.tests
+.. automodule:: TagAPP.tests.tests_views
     :members:
     :undoc-members:
     :show-inheritance:

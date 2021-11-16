@@ -23,7 +23,7 @@ DonatedElementAPP\.serializers module
 DonatedElementAPP\.tests module
 -------------------------------
 
-.. automodule:: DonatedElementAPP.tests
+.. automodule:: DonatedElementAPP.tests.tests_views
     :members:
     :undoc-members:
     :show-inheritance:

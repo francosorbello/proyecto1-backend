@@ -12,7 +12,6 @@ class TestViews(TestCase):
     """
     Contiene los tests para el objeto Donation
     """
-
     def setUp(self) -> None:
         """
         Se ejecuta antes de cada test.
@@ -46,7 +45,8 @@ class TestViews(TestCase):
         response = self.client.get(self.all_url+"{pk}/".format(pk=1))
         self.assertEquals(response.status_code, 200)
         self.assertEquals(
-            response.json()["storageAddress"], "direccion de prueba")
+            response.json()["storageAddress"], "direccion de prueba"
+        )
 
     def test_DonationAPP_POST(self):
         """

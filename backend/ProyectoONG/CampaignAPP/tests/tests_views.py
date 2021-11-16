@@ -7,7 +7,7 @@ import datetime
 
 class TestViews(TestCase):
     """
-    Contiene los tests para el objeto Tag
+    Contiene los tests para el objeto Campaign
     """
 
     def setUp(self) -> None:

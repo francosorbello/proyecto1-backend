@@ -23,7 +23,7 @@ CampaignAPP\.serializers module
 CampaignAPP\.tests module
 -------------------------
 
-.. automodule:: CampaignAPP.tests
+.. automodule:: CampaignAPP.tests.tests_views
     :members:
     :undoc-members:
     :show-inheritance:

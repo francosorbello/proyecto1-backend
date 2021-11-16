@@ -30,7 +30,7 @@ DonationAPP\.serializers module
 DonationAPP\.tests module
 -------------------------
 
-.. automodule:: DonationAPP.tests
+.. automodule:: DonationAPP.tests.tests_views
     :members:
     :undoc-members:
     :show-inheritance:
