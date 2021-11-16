@@ -83,7 +83,6 @@ class DonationAPPView(APIView):
             msg = "Donation created successfully"
             return Response({'message':msg,'id':newDonation.id,'donatedElemIds':donatedElemIds})
         else:
-            print(serializer.errors)
             return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self,request,pk=None):
