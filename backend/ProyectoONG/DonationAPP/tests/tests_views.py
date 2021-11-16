@@ -50,7 +50,7 @@ class TestViews(TestCase):
 
     def test_DonationAPP_POST(self):
         """
-        Testea que el método POST añada una nueva campaña
+        Testea que el método POST añada una nueva donacion
         """
         editCampaign = json.dumps(
             {
@@ -74,7 +74,7 @@ class TestViews(TestCase):
 
     def test_DonationAPP_POST_with_Donated_Elements(self):
         """
-        Testea que el método POST añada una nueva campaña
+        Testea que el método POST añada una nueva donacion
         """
         newCampaign = json.dumps(
             {
@@ -117,7 +117,7 @@ class TestViews(TestCase):
 
     def test_DonationAPP_DELETE(self):
         """
-        Testea que el método DELETE borre una campaña
+        Testea que el método DELETE borre una donacion
         de la base de datos.
         """
         response = self.client.delete(self.all_url+"{pk}/".format(pk=1))
