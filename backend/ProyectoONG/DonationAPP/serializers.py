@@ -24,7 +24,7 @@ class DonationSerializer(serializers.ModelSerializer):
         id del objeto serializado.
 
     """
-    donatedElements = DonatedElementSerializer(many=True)    
+    donatedElements = DonatedElementSerializer(many=True)
     class Meta:
         model = Donation
         fields = ['id','campaignId','storageAddress','status','donatedElements']
