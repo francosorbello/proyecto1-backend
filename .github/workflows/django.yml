@@ -27,8 +27,8 @@ jobs:
         pip install -r requirements.txt
     - name: Run Donation Tests
       run: |
-        python ./backend/ProyectoONG/manage.py test DonationAPP
+        python ./backend/ProyectoONG/manage.py test ./backend/ProyectoONG/DonationAPP/
 
     - name: Run Campaign Tests
       run: |
-        python ./backend/ProyectoONG/manage.py test CampaignAPP
+        python ./backend/ProyectoONG/manage.py test ./backend/ProyectoONG/CampaignAPP/
