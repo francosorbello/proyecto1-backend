@@ -32,3 +32,7 @@ jobs:
     - name: Run Campaign Tests
       run: |
         python ./backend/ProyectoONG/manage.py test ./backend/ProyectoONG/CampaignAPP/
+
+    - name: Run Tag Tests
+      run: |
+        python ./backend/ProyectoONG/manage.py test ./backend/ProyectoONG/TagAPP/
