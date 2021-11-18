@@ -51,9 +51,12 @@ class DonationAPPView(APIView):
             serializedDonations = DonationSerializer(donations,many=True)
             return Response(serializedDonations.data)
         else:
-            donation = Donation.objects.get(id=pk)
-            serialDonation = DonationSerializer(donation)
-            return Response(serialDonation.data)
+            try:
+                donation = Donation.objects.get(id=pk)            
+                serialDonation = DonationSerializer(donation)
+                return Response(serialDonation.data)
+            except:
+                return Response("No existe donacion con id "+str(pk),status=status.HTTP_404_NOT_FOUND)
     
     def post(self,request):
         """
@@ -103,12 +106,15 @@ class DonationAPPView(APIView):
         Response
             JSON con un mensaje que indica que la Donación fue actualizada correctamente.
         '''
-        donation = Donation.objects.get(id=pk)
-        serializedDonation = DonationSerializer(donation,data=request.data)
-        if(serializedDonation.is_valid()):
-            serializedDonation.save()
-        else:
-            return Response(serializedDonation.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        try:
+            donation = Donation.objects.get(id=pk)
+            serializedDonation = DonationSerializer(donation,data=request.data)
+            if(serializedDonation.is_valid()):
+                serializedDonation.save()
+            else:
+                return Response(serializedDonation.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except:
+            return Response("No existe donacion con id "+str(pk),status=status.HTTP_404_NOT_FOUND)
 
     def patch(self,request,pk=None):
         '''
@@ -131,20 +137,23 @@ class DonationAPPView(APIView):
         Response
             JSON con un mensaje que indica que la Donación fue actualizada correctamente.
         '''
-        donation = Donation.objects.get(id=pk)
-        serializedDonation = DonationSerializer(donation,data=request.data,partial=True)
-        if(serializedDonation.is_valid()):
-            newDonation = serializedDonation.save()
-            print(newDonation.id)
-            donatedElems = DonatedElement.objects.filter(donation=newDonation.id)
-            donatedElemIds = []
-            for elem in donatedElems:
-                donatedElemIds.append(elem.id)
+        try:
+            donation = Donation.objects.get(id=pk)
+            serializedDonation = DonationSerializer(donation,data=request.data,partial=True)
+            if(serializedDonation.is_valid()):
+                newDonation = serializedDonation.save()
+                print(newDonation.id)
+                donatedElems = DonatedElement.objects.filter(donation=newDonation.id)
+                donatedElemIds = []
+                for elem in donatedElems:
+                    donatedElemIds.append(elem.id)
 
-            msg = "Donation updated successfully"
-            return Response({"message":msg,"id":newDonation.id,"donatedElemIds":donatedElemIds})
-        else:
-            return JsonResponse(code=400, data="wrong parameters")
+                msg = "Donation updated successfully"
+                return Response({"message":msg,"id":newDonation.id,"donatedElemIds":donatedElemIds})
+            else:
+                return JsonResponse(code=400, data="wrong parameters")
+        except:
+            return Response("No existe donacion con id "+str(pk),status=status.HTTP_404_NOT_FOUND)
 
     def delete(self,request,pk=None):
         """
@@ -166,10 +175,10 @@ class DonationAPPView(APIView):
         Response
             JSON con mensaje que indica que la Donación fue eliminada correctamente.
         """
-        donation = Donation.objects.get(id=pk)
-        if(donation == None):
-            #TODO: implementar error 404 cdo el objeto no existe
-            return Response("")
-        donation.delete()
-        msg = "Donation deleted successfully"
-        return Response({"message":msg})
+        try:
+            donation = Donation.objects.get(id=pk)
+            donation.delete()
+            msg = "Donation deleted successfully"
+            return Response({"message":msg})
+        except:
+            return Response("No existe donacion con id "+str(pk),status=status.HTTP_404_NOT_FOUND)

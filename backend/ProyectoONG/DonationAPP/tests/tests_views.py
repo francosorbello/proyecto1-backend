@@ -12,6 +12,7 @@ class TestViews(TestCase):
     """
     Contiene los tests para el objeto Donation
     """
+
     def setUp(self) -> None:
         """
         Se ejecuta antes de cada test.
@@ -47,6 +48,14 @@ class TestViews(TestCase):
         self.assertEquals(
             response.json()["storageAddress"], "direccion de prueba"
         )
+
+    def test_DonationAPP_GET_By_Id_not_in_db(self):
+        """
+        Testea que el método GET retorne error cuando
+        se pide un objeto que no existe.
+        """
+        response = self.client.get(self.all_url+"{pk}/".format(pk=10))
+        self.assertEquals(response.status_code, 404)
 
     def test_DonationAPP_POST(self):
         """
@@ -102,18 +111,19 @@ class TestViews(TestCase):
         newTagObj = Donation.objects.get(id=response.json()["id"])
         self.assertEquals(newTagObj.storageAddress, "otra casa")
         # checkeo que el nuevo elemento donado fue creado correctamente
-        newDonatedElemObj = DonatedElement.objects.get(id=response.json()["donatedElemIds"][0])
-        self.assertEquals(newDonatedElemObj.description,"objeto 1")
+        newDonatedElemObj = DonatedElement.objects.get(
+            id=response.json()["donatedElemIds"][0])
+        self.assertEquals(newDonatedElemObj.description, "objeto 1")
 
     def test_DonationAPP_POST_empty(self):
         """
         Testea que el método POST retorne error
         cuando se realiza una petición sin datos.
         """
-        response = self.client.post(self.all_url,{})
-        #si el post es vacio deberia dar error ya que no trae data
-        #para los campos obligatorios
-        self.assertEquals(response.status_code,500)
+        response = self.client.post(self.all_url, {})
+        # si el post es vacio deberia dar error ya que no trae data
+        # para los campos obligatorios
+        self.assertEquals(response.status_code, 500)
 
     def test_DonationAPP_DELETE(self):
         """
@@ -121,9 +131,18 @@ class TestViews(TestCase):
         de la base de datos.
         """
         response = self.client.delete(self.all_url+"{pk}/".format(pk=1))
-        self.assertEquals(response.status_code,200)
-        self.assertEquals(Donation.objects.count(),0)
-    
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(Donation.objects.count(), 0)
+
+    def test_DonationAPP_DELETE_non_existant_donation(self):
+        """
+        Testea que tratar de borrar una donacion que no existe
+        retorne error 404
+        """
+        response = self.client.delete(self.all_url+"{pk}/".format(pk=10))
+        self.assertEquals(response.status_code, 404)
+        self.assertEquals(Donation.objects.count(), 1)
+
     def test_DonationAPP_PUT(self):
         """
         Testea que el método PUT actualice una donacion
@@ -142,15 +161,27 @@ class TestViews(TestCase):
                 "status": 2
             }
         )
-        response = self.client.patch(self.all_url+"{pk}/".format(pk=1),editDonation,content_type='application/json')
-        self.assertEquals(response.status_code,200)
+        response = self.client.patch(
+            self.all_url+"{pk}/".format(pk=1), editDonation, content_type='application/json')
+        self.assertEquals(response.status_code, 200)
         editedObj = Donation.objects.get(id=1)
-        self.assertEquals(editedObj.storageAddress,"otra casa editado")
+        self.assertEquals(editedObj.storageAddress, "otra casa editado")
+    
+    def test_DonationAPP_PUT_non_existant_Donation(self):
+        """
+            Testea tratar de editar una donación
+            que no existe.
+        """
+        response = self.client.put(
+            self.all_url+"{pk}/".format(pk=10), {}, content_type='application/json')
+        self.assertEquals(response.status_code, 404)
+        
 
     def test_DonationAPP_PUT_empty(self):
         """
         Testea que el método PUT retorne un error cuando
         no recibe datos en el request.
         """
-        response = self.client.put(self.all_url+"{pk}/".format(pk=1),{},content_type='application/json')
-        self.assertEquals(response.status_code,500)
+        response = self.client.put(
+            self.all_url+"{pk}/".format(pk=1), {}, content_type='application/json')
+        self.assertEquals(response.status_code, 500)
