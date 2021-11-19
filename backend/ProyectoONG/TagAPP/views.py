@@ -44,8 +44,11 @@ class TagAPPView(APIView):
             tags = Tag.objects.all()
             return Response(list(tags.values()))
         else:
-            tag = Tag.objects.get(id=pk)
-            return Response(TagSerializer(tag).data)
+            try:
+                tag = Tag.objects.get(id=pk)
+                return Response(TagSerializer(tag).data)
+            except:
+                return Response("No existe Tag con id "+str(pk),status=status.HTTP_404_NOT_FOUND)
     
     def post(self,request):
         """
@@ -95,13 +98,16 @@ class TagAPPView(APIView):
         Response
             JSON con un mensaje que indica que el tag fue actualizado correctamente
         '''
-        tag = Tag.objects.get(id=pk)
-        serializedTag = TagSerializer(tag,data=request.data)
-        if(serializedTag.is_valid()):
-            serializedTag.save()
-            return Response({"message":"Tag updated successfully"})
-        else:
-            return Response(serializedTag.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        try:
+            tag = Tag.objects.get(id=pk)
+            serializedTag = TagSerializer(tag,data=request.data)
+            if(serializedTag.is_valid()):
+                serializedTag.save()
+                return Response({"message":"Tag updated successfully"})
+            else:
+                return Response(serializedTag.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except:
+            return Response("No existe Tag con id "+str(pk),status=status.HTTP_404_NOT_FOUND)
 
     # def patch(self,request,pk=None):
     #     '''Actualiza valores de un objeto en vez de por completo'''
@@ -128,9 +134,12 @@ class TagAPPView(APIView):
         Response
             JSON con mensaje que indica que el tag fue eliminado correctamente.
         """
-        tag = Tag.objects.get(id=pk)
-        if(tag == None):
-            return Response({"message":"El tag solicitado no existe"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        tag.delete()
-        msg = "Tag "+tag.name+" deleted successfully"
-        return Response({"message":msg})
+        try:
+            tag = Tag.objects.get(id=pk)
+            if(tag == None):
+                return Response({"message":"El tag solicitado no existe"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            tag.delete()
+            msg = "Tag "+tag.name+" deleted successfully"
+            return Response({"message":msg})
+        except:
+            return Response("No existe Tag con id "+str(pk),status=status.HTTP_404_NOT_FOUND)

@@ -40,6 +40,15 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code,200)
         self.assertEquals(response.json()["name"],"campaña 1")
     
+    def test_CampaignAPP_GET_non_existant_Object(self):
+        """
+        Testea que cuando se trata de obtener un recurso que no existe,
+        la API retorna error
+        """
+        response = self.client.get(self.all_url+"{pk}/".format(pk=10))
+        self.assertEquals(response.status_code,404)
+
+    
     def test_CampaignAPP_POST(self):
         """
         Testea que el método POST añada una nueva campaña
@@ -75,6 +84,15 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code,200)
         self.assertEquals(Campaign.objects.count(),0)
     
+    def test_CampaignAPP_DELETE_non_existant_Object(self):
+        """
+        Testea que tratar de eliminar una campaña que no existe
+        retorna error.
+        """
+        response = self.client.delete(self.all_url+"{pk}/".format(pk=10))
+        self.assertEquals(response.status_code,404)
+        self.assertEquals(Campaign.objects.count(),1)
+    
     def test_CampaignAPP_PUT(self):
         """
         Testea que el método PUT actualice una campaña
@@ -103,3 +121,11 @@ class TestViews(TestCase):
         """
         response = self.client.put(self.all_url+"{pk}/".format(pk=1),{},content_type='application/json')
         self.assertEquals(response.status_code,500)
+
+    def test_CampaignAPP_PUT_non_existant_Object(self):
+        """
+        Testea que el método PUT retorne un error cuando
+        se trata de actualizar un recurso inexistente.
+        """
+        response = self.client.put(self.all_url+"{pk}/".format(pk=10),{},content_type='application/json')
+        self.assertEquals(response.status_code,404)

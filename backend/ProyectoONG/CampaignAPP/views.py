@@ -47,8 +47,11 @@ class CampaignAPPView(APIView):
             else:
                 return Response(list(campaigns.values()))
         else:
-            campaign = Campaign.objects.get(id=pk)
-            return Response(CampaignSerializer(campaign).data)
+            try:
+                campaign = Campaign.objects.get(id=pk)
+                return Response(CampaignSerializer(campaign).data)
+            except:
+                return Response("No existe campaña con id "+str(pk),status=status.HTTP_404_NOT_FOUND)
     
     def post(self,request):
         """
@@ -101,13 +104,16 @@ class CampaignAPPView(APIView):
         Response
             JSON con un mensaje que indica que la campaña fue actualizada correctamente
         '''
-        campaign = Campaign.objects.get(id=pk)
-        serializedCampaign = CampaignSerializer(campaign,data=request.data)
-        if(serializedCampaign.is_valid()):
-            serializedCampaign.save()
-            return Response({"message":"Campaign updated successfully"})
-        else:
-            return Response(serializedCampaign.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        try:
+            campaign = Campaign.objects.get(id=pk)
+            serializedCampaign = CampaignSerializer(campaign,data=request.data)
+            if(serializedCampaign.is_valid()):
+                serializedCampaign.save()
+                return Response({"message":"Campaign updated successfully"})
+            else:
+                return Response(serializedCampaign.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except:
+            return Response("No existe campaña con id "+str(pk),status=status.HTTP_404_NOT_FOUND)
 
     def patch(self,request,pk=None):
         '''
@@ -130,13 +136,16 @@ class CampaignAPPView(APIView):
         Response
             JSON con un mensaje que indica que la Campaña fue actualizada correctamente.
         '''
-        campaign = Campaign.objects.get(id=pk)
-        serializedCampaign = CampaignSerializer(campaign,data=request.data,partial=True)
-        if(serializedCampaign.is_valid()):
-            serializedCampaign.save()
-            return Response({"message":"Campaign updated successfully"})
-        else:
-            return Response(serializedCampaign.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        try:
+            campaign = Campaign.objects.get(id=pk)
+            serializedCampaign = CampaignSerializer(campaign,data=request.data,partial=True)
+            if(serializedCampaign.is_valid()):
+                serializedCampaign.save()
+                return Response({"message":"Campaign updated successfully"})
+            else:
+                return Response(serializedCampaign.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except:
+            return Response("No existe campaña con id "+str(pk),status=status.HTTP_404_NOT_FOUND)
 
     def delete(self,request,pk=None):
         """
@@ -158,9 +167,10 @@ class CampaignAPPView(APIView):
         Response
             JSON con mensaje que indica que la campaña fue eliminada correctamente.
         """
-        campaign = Campaign.objects.get(id=pk)
-        if(campaign == None):
-            return Response({"message":"La campaña que deseas borrar no existe"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        campaign.delete()
-        msg = "Campaign "+campaign.name+ " deleted successfully"
-        return Response({"message":msg})
+        try:
+            campaign = Campaign.objects.get(id=pk)
+            campaign.delete()
+            msg = "Campaign "+campaign.name+ " deleted successfully"
+            return Response({"message":msg})
+        except:
+            return Response("No existe campaña con id "+str(pk),status=status.HTTP_404_NOT_FOUND)

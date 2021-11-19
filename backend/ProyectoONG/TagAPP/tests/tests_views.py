@@ -35,6 +35,14 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code,200)
         self.assertEquals(response.json()["name"],"invierno")
     
+    def test_TagAPP_GET_ById_non_existant_Object(self):
+        """
+        Testea que el método GET retorne error cuando 
+        se trata de obtener un tag que no existe.
+        """
+        response = self.client.get(self.all_url+"{pk}/".format(pk=10))
+        self.assertEquals(response.status_code,404)
+
     def test_TagAPP_POST(self):
         """
         Testea que el método POST añada un nuevo objeto
@@ -65,6 +73,15 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code,200)
         self.assertEquals(Tag.objects.count(),0)
     
+    def test_TagAPP_DELETE_non_existant_Object(self):
+        """
+        Testea que el método DELETE retorne error
+        cuando el objeto solicitado no existe.
+        """
+        response = self.client.delete(self.all_url+"{pk}/".format(pk=10))
+        self.assertEquals(response.status_code,404)
+        self.assertEquals(Tag.objects.count(),1)
+
     def test_TagAPP_PUT(self):
         """
         Testea que el método PUT actualice un objeto
@@ -85,3 +102,11 @@ class TestViews(TestCase):
         """
         response = self.client.put(self.all_url+"{pk}/".format(pk=1),{},content_type='application/json')
         self.assertEquals(response.status_code,500)
+    
+    def test_TagAPP_PUT_non_existant_Object(self):
+        """
+        Testea que el método PUT retorne un error cuando
+        se actualiza un objeto que no existe
+        """
+        response = self.client.put(self.all_url+"{pk}/".format(pk=10),{},content_type='application/json')
+        self.assertEquals(response.status_code,404)
