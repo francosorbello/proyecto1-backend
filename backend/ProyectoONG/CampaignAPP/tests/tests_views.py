@@ -31,7 +31,7 @@ class TestViews(TestCase):
         response = self.client.get(self.all_url)
         self.assertEquals(response.status_code,200)
     
-    def test_CampaignAPP_GET_ById(self):
+    def test_CampaignAPP_GET_invalid_Campaign(self):
         """
         Testea que el método GET funcione cuando
         se pide un objeto con un id específico.
@@ -40,7 +40,7 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code,200)
         self.assertEquals(response.json()["name"],"campaña 1")
     
-    def test_CampaignAPP_GET_non_existant_Object(self):
+    def test_CampaignAPP_GET_invalid_Campaign(self):
         """
         Testea que cuando se trata de obtener un recurso que no existe,
         la API retorna error
@@ -84,7 +84,7 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code,200)
         self.assertEquals(Campaign.objects.count(),0)
     
-    def test_CampaignAPP_DELETE_non_existant_Object(self):
+    def test_CampaignAPP_DELETE_invalid_Campaign(self):
         """
         Testea que tratar de eliminar una campaña que no existe
         retorna error.
@@ -122,7 +122,7 @@ class TestViews(TestCase):
         response = self.client.put(self.all_url+"{pk}/".format(pk=1),{},content_type='application/json')
         self.assertEquals(response.status_code,500)
 
-    def test_CampaignAPP_PUT_non_existant_Object(self):
+    def test_CampaignAPP_PUT_invalid_Campaign(self):
         """
         Testea que el método PUT retorne un error cuando
         se trata de actualizar un recurso inexistente.

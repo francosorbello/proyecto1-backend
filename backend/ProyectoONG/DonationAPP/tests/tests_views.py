@@ -49,7 +49,7 @@ class TestViews(TestCase):
             response.json()["storageAddress"], "direccion de prueba"
         )
 
-    def test_DonationAPP_GET_By_Id_not_in_db(self):
+    def test_DonationAPP_GET_invalid_Donation(self):
         """
         Testea que el método GET retorne error cuando
         se pide un objeto que no existe.
@@ -134,7 +134,7 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(Donation.objects.count(), 0)
 
-    def test_DonationAPP_DELETE_non_existant_donation(self):
+    def test_DonationAPP_DELETE_invalid_Donation(self):
         """
         Testea que tratar de borrar una donacion que no existe
         retorne error 404
@@ -167,7 +167,7 @@ class TestViews(TestCase):
         editedObj = Donation.objects.get(id=1)
         self.assertEquals(editedObj.storageAddress, "otra casa editado")
     
-    def test_DonationAPP_PUT_non_existant_Donation(self):
+    def test_DonationAPP_PUT_invalid_Donation(self):
         """
             Testea tratar de editar una donación
             que no existe.
