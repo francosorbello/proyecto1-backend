@@ -73,7 +73,19 @@ class TestViews(TestCase):
         response = self.client.post(self.all_url,{})
         #si el post es vacio deberia dar error ya que no trae data
         #para los campos obligatorios
-        self.assertEquals(response.status_code,500)
+        self.assertEquals(response.status_code,400)
+
+    def test_CampaignAPP_POST_initialDate_bigger_than_EndDate(self):
+        """
+        Testea que tratar de añadir una campaña con fecha inicial mayor a la de fin retorne error 400.
+        """
+        response = self.client.post(self.all_url,{
+                "name":"campaña 3",
+                "description": "otra desc 2",
+                "initialDate": "2020-06-19",
+                "endDate": "2020-05-18",
+            })
+        self.assertEquals(response.status_code,400)
 
     def test_CampaignAPP_DELETE(self):
         """
@@ -113,14 +125,34 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code,200)
         editedObj = Campaign.objects.get(id=1)
         self.assertEquals(editedObj.name,"campaña 1 editado")
-    
+
+    def test_CampaignAPP_PUT_initialDate_bigger_than_EndDate(self):
+        """
+        Testea que el método PUT retorne error al actualizar
+        con fecha de inicio mayor a la de fin.
+        """
+        editCampaign = json.dumps(
+            {
+                "name":"campaña 1 editado",
+                "description": "otra desc",
+                "initialDate": "2021-05-17",
+                "endDate": "2020-05-18",
+            }
+        )
+        response = self.client.put(
+                self.all_url+"{pk}/".format(pk=1),
+                editCampaign,
+                content_type='application/json'
+            )
+        self.assertEquals(response.status_code,400)
+
     def test_CampaignAPP_PUT_empty(self):
         """
         Testea que el método PUT retorne un error cuando
         no recibe datos en el request.
         """
         response = self.client.put(self.all_url+"{pk}/".format(pk=1),{},content_type='application/json')
-        self.assertEquals(response.status_code,500)
+        self.assertEquals(response.status_code,400)
 
     def test_CampaignAPP_PUT_invalid_Campaign(self):
         """

@@ -1,3 +1,4 @@
+from datetime import date
 from .models import Campaign
 from rest_framework import serializers
 
@@ -56,3 +57,12 @@ class CampaignSerializer(serializers.Serializer):
         instance.save()
         return instance
     
+    def validate(self, attrs):
+        """
+        Valida los datos recibidos en el request.
+        
+        Checkea que la fecha de inicio se menor que la de fin.
+        """
+        if(attrs["initialDate"] > attrs["endDate"]):
+            raise serializers.ValidationError("La fecha de inicio es mas grande que la de fin")
+        return super().validate(attrs)

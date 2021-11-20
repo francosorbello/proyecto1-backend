@@ -1,4 +1,6 @@
 
+from django.db import models
+from django.db.models.base import Model
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -50,7 +52,7 @@ class CampaignAPPView(APIView):
             try:
                 campaign = Campaign.objects.get(id=pk)
                 return Response(CampaignSerializer(campaign).data)
-            except:
+            except Campaign.DoesNotExist:
                 return Response("No existe campaña con id "+str(pk),status=status.HTTP_404_NOT_FOUND)
     
     def post(self,request):
@@ -84,7 +86,7 @@ class CampaignAPPView(APIView):
             msg = "Campaign "+newCampaign.name+ " created successfully"
             return Response({'message':msg,"id":newCampaign.id})
         else:
-            return Response(serializer.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
     def put(self,request,pk=None):
         '''
@@ -107,13 +109,18 @@ class CampaignAPPView(APIView):
         try:
             campaign = Campaign.objects.get(id=pk)
             serializedCampaign = CampaignSerializer(campaign,data=request.data)
-            if(serializedCampaign.is_valid()):
+            if(serializedCampaign.is_valid(raise_exception=True)):
                 serializedCampaign.save()
                 return Response({"message":"Campaign updated successfully"})
             else:
                 return Response(serializedCampaign.errors,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except:
+        except Campaign.DoesNotExist:
             return Response("No existe campaña con id "+str(pk),status=status.HTTP_404_NOT_FOUND)
+        except serializers.ValidationError as e:
+            return Response(e.detail,status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(e)
+            return Response("Error inesperado en el backend",status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def patch(self,request,pk=None):
         '''
