@@ -1,4 +1,4 @@
-# Proyecto 1
+# Backend Proyecto 1
 App para manejar stock de una ONG. Desarrolllado en Django.
 
 # Enviroment Set Up
