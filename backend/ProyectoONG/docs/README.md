@@ -1,6 +1,16 @@
 # Documentación Backend
 
+## Generar documentación
+
+En la carpeta `docs` correr el comando:
+
+```
+make html
+```
+
 ## Instrucciones de instalación
+
+Esta sección explica el proceso de instalación de los paquetes y cómo se generó la documentación original. Para volver a obtenerla no es necesario realizar todos estos pasos, en cambio se debe utilizar el comando explicado en la sección anterior.
 
 Para generar la documentación, se utilizaron 2 paquetes:
 
